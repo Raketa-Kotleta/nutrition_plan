@@ -11,7 +11,9 @@
   --green-light: #E0F5EC;
   --green-dark: #0D6B49;
   --amber: #D97A1A;
+  --amber-light: #FFF3E5;
   --blue: #2176C7;
+  --blue-light: #E8F2FC;
   --bg: #F5F3EE;
   --bg2: #EDEAE3;
   --surface: #FFFFFF;
@@ -339,6 +341,149 @@ body{
 .rule-title{font-weight:600;font-size:13px;color:var(--text);margin-bottom:4px;}
 .rule-body{font-size:12px;color:var(--text2);line-height:1.6;}
 
+/* PROGRESS TAB */
+.prog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.weight-form {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.form-group label {
+  font-size: 11px;
+  color: var(--text2);
+  font-weight: 500;
+}
+.form-group input {
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--border);
+  font-family: 'Geologica', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+}
+.form-group input:focus {
+  border-color: var(--green);
+}
+.btn-submit {
+  background: var(--text);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: var(--r-sm);
+  font-family: 'Geologica', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s;
+  width: 100%;
+}
+.btn-submit:active {
+  background: #333;
+}
+.chart-box {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+.chart-wrap {
+  width: 100%;
+  height: 200px;
+  margin-top: 10px;
+  position: relative;
+}
+.chart-svg {
+  width: 100%;
+  height: 100%;
+}
+.chart-empty {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 13px; text-align: center;
+  background: rgba(255,255,255,0.8);
+}
+.rec-box {
+  border-radius: var(--r);
+  padding: 14px 15px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.rec-box.green { background: var(--green-light); color: var(--green-dark); border-left: 4px solid var(--green); }
+.rec-box.amber { background: var(--amber-light); color: var(--amber); border-left: 4px solid var(--amber); }
+.rec-box.blue { background: var(--blue-light); color: var(--blue); border-left: 4px solid var(--blue); }
+
+.rec-box b { display: block; margin-bottom: 4px; font-size: 14px; }
+
+.share-row {
+  display: flex;
+  gap: 10px;
+}
+.btn-share {
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  padding: 10px;
+  border-radius: var(--r-sm);
+  font-family: 'Geologica', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-share:active {
+  background: var(--bg2);
+}
+#file-import { display: none; }
+
+.history-box {
+  background: var(--surface);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.hist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--bg2);
+  font-size: 13px;
+}
+.hist-item:last-child { border-bottom: none; }
+.hist-date { color: var(--text2); }
+.hist-weight { font-weight: 600; font-family: 'Unbounded', sans-serif; }
+.hist-del {
+  color: #E53E3E;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+}
+
 /* FOOTER */
 .footer{
   background:var(--text);color:rgba(255,255,255,0.35);
@@ -369,7 +514,6 @@ body{
 
 <main class="main">
 
-<!-- ОБЗОР -->
 <div class="section on" id="s-overview">
   <div class="sec-title">Параметры</div>
   <div class="ov-grid">
@@ -406,7 +550,6 @@ body{
   </div>
 </div>
 
-<!-- ПО ДНЯМ -->
 <div class="section" id="s-days">
   <div class="day-selector-wrap">
     <div class="day-selector">
@@ -420,7 +563,6 @@ body{
     </div>
   </div>
 
-  <!-- ВОСКРЕСЕНЬЕ -->
   <div class="day-view on" id="d-sun">
     <div class="day-header">
       <div class="day-title">Воскресенье</div>
@@ -448,14 +590,13 @@ body{
         <li class="prep-item"><span class="prep-qty">300 г</span><div>Рис белый — сварить, ~4 порции</div></li>
         <li class="prep-item"><span class="prep-qty">400 г</span><div>Батат/картофель — запечь, нарезать кубиками</div></li>
         <li class="prep-item"><span class="prep-qty">9 шт</span><div>Яйца — сварить вкрутую, хранятся 7 дней<div class="prep-sub">Только Пн, Ср, Пт</div></div></li>
-        <li class="prep-item"><span class="prep-qty">~3 кг</span><div>Творог — 0% на вечер, 5% на перекусы</div></li>
+        <li class="prep-item"><span class="prep-qty">~3 кг</span><div>Творог — 0% на evening, 5% на перекусы</div></li>
         <li class="prep-item"><span class="prep-qty">~850 г</span><div>Греческий йогурт 2% — 3 баночки по 300 г</div></li>
         <li class="prep-item"><span class="prep-qty">1.7 кг</span><div>Брокколи замороженная — 2–3 пакета по 750 г</div></li>
       </ul>
     </div>
   </div>
 
-  <!-- ПОНЕДЕЛЬНИК -->
   <div class="day-view" id="d-mon">
     <div class="day-header"><div class="day-title">Понедельник</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">~15 мин готовки</span></div></div>
     <div class="day-kpis">
@@ -474,7 +615,6 @@ body{
     </div>
   </div>
 
-  <!-- ВТОРНИК -->
   <div class="day-view" id="d-tue">
     <div class="day-header"><div class="day-title">Вторник</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">~10 мин готовки</span></div></div>
     <div class="day-kpis">
@@ -493,7 +633,6 @@ body{
     </div>
   </div>
 
-  <!-- СРЕДА -->
   <div class="day-view" id="d-wed">
     <div class="day-header"><div class="day-title">Среда</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">~15 мин готовки</span></div></div>
     <div class="day-kpis">
@@ -512,7 +651,6 @@ body{
     </div>
   </div>
 
-  <!-- ЧЕТВЕРГ -->
   <div class="day-view" id="d-thu">
     <div class="day-header"><div class="day-title">Четверг</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">~10 мин готовки</span></div></div>
     <div class="day-kpis">
@@ -531,7 +669,6 @@ body{
     </div>
   </div>
 
-  <!-- ПЯТНИЦА -->
   <div class="day-view" id="d-fri">
     <div class="day-header"><div class="day-title">Пятница</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">Докупить свежего</span></div></div>
     <div class="day-kpis">
@@ -550,7 +687,6 @@ body{
     </div>
   </div>
 
-  <!-- СУББОТА -->
   <div class="day-view" id="d-sat">
     <div class="day-header"><div class="day-title">Суббота</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">Свободный день</span></div></div>
     <div class="day-kpis">
@@ -578,7 +714,6 @@ body{
   </div>
 </div>
 
-<!-- ПОКУПКИ -->
 <div class="section" id="s-shopping">
   <div class="shop-progress">
     <div class="progress-text">Куплено: <strong id="done-c">0</strong>/<strong id="total-c">0</strong></div>
@@ -653,7 +788,6 @@ body{
   </div>
 </div>
 
-<!-- ПРАВИЛА -->
 <div class="section" id="s-rules">
   <div class="sec-title">Ключевые правила</div>
   <div class="rules-list">
@@ -668,6 +802,50 @@ body{
   </div>
 </div>
 
+<div class="section" id="s-progress">
+  <div class="prog-container">
+    
+    <div class="sec-title">Внести вес</div>
+    <form class="weight-form" id="weightForm" onsubmit="saveWeight(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="w-date">Дата</label>
+          <input type="date" id="w-date" required>
+        </div>
+        <div class="form-group">
+          <label for="w-val">Вес (кг)</label>
+          <input type="number" id="w-val" step="0.1" min="40" max="200" placeholder="00.0" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-submit">Сохранить запись</button>
+    </form>
+
+    <div class="sec-title">График снижения веса</div>
+    <div class="chart-box">
+      <div class="chart-wrap">
+        <div class="chart-empty" id="chartEmpty">Добавьте хотя бы 2 записи, чтобы увидеть график тренда</div>
+        <svg class="chart-svg" id="progressChart" viewBox="0 0 400 200" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="sec-title">Аналитика и совет</div>
+    <div class="rec-box blue" id="recBox">
+      <b>Ожидание данных</b>Введите данные за несколько дней, чтобы система рассчитала вашу реальную скорость похудения и скорректировала план.
+    </div>
+
+    <div class="sec-title">Данные и обмен</div>
+    <div class="share-row">
+      <button class="btn-share" onclick="exportToCSV()">📤 Экспорт в CSV</button>
+      <button class="btn-share" onclick="document.getElementById('file-import').click()">📥 Импорт CSV</button>
+      <input type="file" id="file-import" accept=".csv" onchange="importFromCSV(event)">
+    </div>
+
+    <div class="sec-title">История взвешиваний</div>
+    <div class="history-box" id="historyList"></div>
+
+  </div>
+</div>
+
 </main>
 
 <footer class="footer">
@@ -676,21 +854,25 @@ body{
   Проконсультируйтесь с врачом перед началом диеты
 </footer>
 
-<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
   <button class="bnav-btn on" onclick="go(event,'overview')"><span class="icon">📊</span>Обзор</button>
   <button class="bnav-btn" onclick="go(event,'days')"><span class="icon">📅</span>По дням</button>
+  <button class="bnav-btn" onclick="go(event,'progress')"><span class="icon">📈</span>Прогресс</button>
   <button class="bnav-btn" onclick="go(event,'shopping')"><span class="icon">🛒</span>Покупки</button>
   <button class="bnav-btn" onclick="go(event,'rules')"><span class="icon">📋</span>Правила</button>
 </nav>
 
 <script>
+// Навигация
 function go(e,id){
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
   e.currentTarget.classList.add('on');
   document.getElementById('s-'+id).classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id === 'progress') {
+    initProgressTab();
+  }
 }
 function sd(e,id){
   document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('on'));
@@ -698,6 +880,8 @@ function sd(e,id){
   e.currentTarget.classList.add('on');
   document.getElementById('d-'+id).classList.add('on');
 }
+
+// Список покупок
 function tick(cb){
   cb.closest('.shop-item').classList.toggle('done',cb.checked);
   updateProgress();
@@ -705,9 +889,14 @@ function tick(cb){
 function updateProgress(){
   const all=document.querySelectorAll('.shop-items input');
   const done=document.querySelectorAll('.shop-items input:checked');
-  document.getElementById('done-c').textContent=done.length;
-  document.getElementById('total-c').textContent=all.length;
-  document.getElementById('prog-fill').style.width=(all.length?done.length/all.length*100:0)+'%';
+  const doneC = document.getElementById('done-c');
+  const totalC = document.getElementById('total-c');
+  const progFill = document.getElementById('prog-fill');
+  if(doneC && totalC && progFill) {
+    doneC.textContent=done.length;
+    totalC.textContent=all.length;
+    progFill.style.width=(all.length?done.length/all.length*100:0)+'%';
+  }
 }
 function resetShop(){
   document.querySelectorAll('.shop-items input').forEach(cb=>{
@@ -716,6 +905,317 @@ function resetShop(){
   });
   updateProgress();
 }
+
+// ЛОГИКА ВКЛАДКИ «ПРОГРЕСС»
+let weightData = [];
+
+function initProgressTab() {
+  // Установка сегодняшней даты по дефолту
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('w-date').value = today;
+  
+  loadFromStorage();
+  renderProgress();
+}
+
+function loadFromStorage() {
+  const saved = localStorage.getItem('diet_weight_history');
+  if(saved) {
+    try {
+      weightData = JSON.parse(saved);
+      // Сортировка по дате от старых к новым
+      weightData.sort((a,b) => new Date(a.date) - new Date(b.date));
+    } catch(e) {
+      weightData = [];
+    }
+  } else {
+    // Начальная точка по умолчанию, если локалсторейдж чист
+    weightData = [{date: todayDaysAgo(7), weight: 94.0}];
+    saveToStorage();
+  }
+}
+
+function todayDaysAgo(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString().split('T')[0];
+}
+
+function saveToStorage() {
+  localStorage.setItem('diet_weight_history', JSON.stringify(weightData));
+}
+
+function saveWeight(e) {
+  e.preventDefault();
+  const dateInput = document.getElementById('w-date').value;
+  const weightInput = parseFloat(document.getElementById('w-val').value);
+  
+  if(!dateInput || isNaN(weightInput)) return;
+  
+  // Проверка, есть ли уже запись на эту дату
+  const existingIdx = weightData.findIndex(item => item.date === dateInput);
+  if(existingIdx !== -1) {
+    weightData[existingIdx].weight = weightInput;
+  } else {
+    weightData.push({date: dateInput, weight: weightInput});
+  }
+  
+  weightData.sort((a,b) => new Date(a.date) - new Date(b.date));
+  saveToStorage();
+  renderProgress();
+  document.getElementById('w-val').value = '';
+}
+
+function deleteRecord(date) {
+  if(confirm(`Удалить запись за ${viewDate(date)}?`)) {
+    weightData = weightData.filter(item => item.date !== date);
+    saveToStorage();
+    renderProgress();
+  }
+}
+
+function viewDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'});
+}
+
+function renderProgress() {
+  renderHistory();
+  renderChart();
+  renderRecommendations();
+}
+
+function renderHistory() {
+  const container = document.getElementById('historyList');
+  if(!container) return;
+  
+  if(weightData.length === 0) {
+    container.innerHTML = '<div style="padding:15px;text-align:center;color:var(--text3);font-size:13px;">История пуста</div>';
+    return;
+  }
+  
+  // Показываем историю от новых к старым
+  let html = '';
+  const reversed = [...weightData].reverse();
+  reversed.forEach(item => {
+    html += `
+      <div class="hist-item">
+        <span class="hist-date">${viewDate(item.date)}</span>
+        <div>
+          <span class="hist-weight">${item.weight} кг</span>
+          <button class="hist-del" onclick="deleteRecord('${item.date}')">✕</button>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function renderChart() {
+  const svg = document.getElementById('progressChart');
+  const empty = document.getElementById('chartEmpty');
+  if(!svg || !empty) return;
+  
+  if(weightData.length < 2) {
+    svg.style.display = 'none';
+    empty.style.display = 'flex';
+    return;
+  }
+  
+  svg.style.display = 'block';
+  empty.style.display = 'none';
+  svg.innerHTML = '';
+  
+  const width = 400;
+  const height = 200;
+  const padding = {top: 20, right: 20, bottom: 30, left: 35};
+  
+  // Временные рамки
+  const dates = weightData.map(d => new Date(d.date).getTime());
+  const minX = Math.min(...dates);
+  const maxX = Math.max(...dates);
+  const timeRange = maxX - minX || 86400000; // Избегаем деления на 0
+  
+  // Рамки веса (с запасом к цели 75)
+  const weights = weightData.map(d => d.weight);
+  let maxW = Math.max(...weights, 94);
+  let minW = Math.min(...weights, 75);
+  maxW = Math.ceil(maxW + 1);
+  minW = Math.floor(minW - 1);
+  const wRange = maxW - minW;
+
+  // Функция перевода координат
+  const getX = (ts) => padding.left + ((ts - minX) / timeRange) * (width - padding.left - padding.right);
+  const getY = (w) => padding.bottom + ((maxW - w) / wRange) * (height - padding.top - padding.bottom);
+
+  // Сетка (горизонтальные линии веса)
+  let gridHtml = '';
+  const step = wRange > 10 ? 5 : 2;
+  for(let w = Math.ceil(minW/step)*step; w <= maxW; w += step) {
+    const y = getY(w);
+    gridHtml += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>`;
+    gridHtml += `<text x="${padding.left - 8}" y="${y + 4}" font-size="9" fill="var(--text3)" text-anchor="end">${w}</text>`;
+  }
+  
+  // Линия идеального тренда (94кг -> 75кг пунктир)
+  const startPointX = getX(minX);
+  const targetY = getY(75);
+  const startW = weightData[0].weight;
+  const startY = getY(startW);
+  
+  gridHtml += `<line x1="${startPointX}" y1="${startY}" x2="${width - padding.right}" y2="${targetY}" stroke="var(--text3)" stroke-width="1.5" stroke-dasharray="4,4"/>`;
+
+  // Построение линии графика
+  let points = '';
+  let dotsHtml = '';
+  
+  weightData.forEach((item) => {
+    const cx = getX(new Date(item.date).getTime());
+    const cy = getY(item.weight);
+    points += `${cx},${cy} `;
+    dotsHtml += `<circle cx="${cx}" cy="${cy}" r="3" fill="var(--green)"/>`;
+  });
+  
+  // Добавляем крайние даты на оси X
+  const firstDateStr = viewDate(weightData[0].date);
+  const lastDateStr = viewDate(weightData[weightData.length - 1].date);
+  gridHtml += `<text x="${padding.left}" y="${height - 8}" font-size="9" fill="var(--text3)" text-anchor="start">${firstDateStr}</text>`;
+  gridHtml += `<text x="${width - padding.right}" y="${height - 8}" font-size="9" fill="var(--text3)" text-anchor="end">${lastDateStr}</text>`;
+
+  svg.innerHTML = `
+    <g class="grid">${gridHtml}</g>
+    <polyline fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>
+    <g class="dots">${dotsHtml}</g>
+  `;
+}
+
+function renderRecommendations() {
+  const recBox = document.getElementById('recBox');
+  if(!recBox) return;
+  
+  if(weightData.length < 2) {
+    recBox.className = "rec-box blue";
+    recBox.innerHTML = `<b>Ожидание данных</b>Внесите вес минимум за 2 разных дня, чтобы калькулятор смог рассчитать динамику изменений.`;
+    return;
+  }
+  
+  const first = weightData[0];
+  const last = weightData[weightData.length - 1];
+  
+  const daysDiff = (new Date(last.date) - new Date(first.date)) / 86400000;
+  
+  if(daysDiff < 4) {
+    recBox.className = "rec-box blue";
+    recBox.innerHTML = `<b>Начальный этап</b>Вы отлично начали! Продолжайте замеры. Точный расчет средней скорости и рекомендации появятся, когда интервал между первой и последней записью будет больше 4 дней.`;
+    return;
+  }
+  
+  const weightLoss = first.weight - last.weight;
+  const weeklyRate = (weightLoss / daysDiff) * 7; // скорость потери в неделю
+  
+  if(weeklyRate < 0) {
+    recBox.className = "rec-box amber";
+    recBox.innerHTML = `
+      <b>Фиксируется рост веса (+${Math.abs(weeklyRate).toFixed(2)} кг/нед)</b>
+      Без паники. Если это первые дни, возможна задержка воды от тренировок или соли. 
+      Если тенденция держится 2 недели: урежьте углеводы на 20-30 г (уберите 1 порцию риса/хлеба) или добавьте 20 минут кардио. Убедитесь, что не делаете скрытых перекусов.
+    `;
+  } else if(weeklyRate < 0.3) {
+    recBox.className = "rec-box amber";
+    recBox.innerHTML = `
+      <b>Вес снижается слишком медленно (${weeklyRate.toFixed(2)} кг/нед)</b>
+      Ваш целевой темп — 0.5 кг в неделю. Сейчас дефицит калорий недостаточен. 
+      <b>Рекомендация:</b> Сократите углеводы в дни отдыха. Замените один перекус творогом 0% вместо 5%. Увеличьте бытовую активность (цель — 10 000 шагов ежедневно).
+    `;
+  } else if(weeklyRate > 0.9) {
+    recBox.className = "rec-box amber";
+    recBox.innerHTML = `
+      <b>Слишком быстрое похудение (${weeklyRate.toFixed(2)} кг/нед)</b>
+      Высокий риск сжечь мышечную массу вместе с жиром. 
+      <b>Рекомендация:</b> Поднимите калорийность на 150–200 ккал. Добавьте в рацион 1 дополнительное яйцо на завтрак или 30 г орехов в перекус. Не опускайте общие калории ниже нормы!
+    `;
+  } else {
+    recBox.className = "rec-box green";
+    recBox.innerHTML = `
+      <b>Идеальный темп похудения (${weeklyRate.toFixed(2)} кг/нед)</b>
+      Вы в «золотой зоне» (0.4 – 0.8 кг в неделю). Жир уходит оптимально, мышцы под надежной защитой благодаря высокому уровню белка в рационе. Ничего не меняйте, продолжайте в том же духе!
+    `;
+  }
+}
+
+// ЭКСПОРТ И ИМПОРТ CSV
+function exportToCSV() {
+  if(weightData.length === 0) {
+    alert('Нет данных для экспорта');
+    return;
+  }
+  
+  let csvContent = "data:text/csv;charset=utf-8,Дата,Вес (кг)\n";
+  weightData.forEach(item => {
+    csvContent += `${item.date},${item.weight}\n`;
+  });
+  
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `weight_progress_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function importFromCSV(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const lines = text.split('\n');
+    let importedData = [];
+    
+    for(let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if(!line) continue;
+      
+      const parts = line.split(',');
+      if(parts.length >= 2) {
+        const date = parts[0].trim();
+        const weight = parseFloat(parts[1].trim());
+        
+        // Валидация даты (гггг-мм-дд) и веса
+        if(/^\d{4}-\d{2}-\d{2}$/.test(date) && !isNaN(weight)) {
+          importedData.push({date, weight});
+        }
+      }
+    }
+    
+    if(importedData.length > 0) {
+      if(confirm(`Найдено ${importedData.length} корректных записей. Объединить с текущими данными? (Существующие даты перезапишутся)`)) {
+        
+        importedData.forEach(impItem => {
+          const idx = weightData.findIndex(w => w.date === impItem.date);
+          if(idx !== -1) {
+            weightData[idx].weight = impItem.weight;
+          } else {
+            weightData.push(impItem);
+          }
+        });
+        
+        weightData.sort((a,b) => new Date(a.date) - new Date(b.date));
+        saveToStorage();
+        renderProgress();
+        alert('Данные успешно импортированы!');
+      }
+    } else {
+      alert('Не удалось найти корректные данные в файле. Используйте формат: ГГГГ-ММ-ДД,Вес');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // сброс инпута
+}
+
+// Инициализация при старте
 updateProgress();
 </script>
 </body>
