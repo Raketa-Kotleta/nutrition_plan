@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Рацион питания</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Geologica:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1A9E6F;
+  --green-light: #E0F5EC;
+  --green-dark: #0D6B49;
+  --amber: #D97A1A;
+  --blue: #2176C7;
+  --bg: #F5F3EE;
+  --bg2: #EDEAE3;
+  --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.08);
+  --text: #1A1916;
+  --text2: #5A5750;
+  --text3: #9A9790;
+  --r: 12px;
+  --r-sm: 8px;
+  --nav-h: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Geologica',sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.6;
+  padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 8px);
+}
+
+/* TOP BAR */
+.topbar{
+  background:var(--text);
+  height:52px;
+  display:flex;align-items:center;
+  padding:0 16px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 1px 12px rgba(0,0,0,0.2);
+}
+.topbar-logo{
+  font-family:'Unbounded',sans-serif;
+  font-size:12px;font-weight:600;
+  color:#fff;letter-spacing:.5px;
+  display:flex;align-items:center;gap:8px;
+}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
+.topbar-sub{
+  margin-left:auto;
+  font-size:11px;color:rgba(255,255,255,0.45);
+}
+
+/* HERO */
+.hero{
+  background:var(--text);
+  padding:20px 16px 28px;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;
+  top:-40px;right:-40px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,158,111,0.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);font-weight:600;margin-bottom:10px;
+}
+.hero h1{
+  font-family:'Unbounded',sans-serif;
+  font-size:1.5rem;font-weight:700;
+  color:#fff;line-height:1.2;margin-bottom:8px;
+}
+.hero h1 em{color:var(--green);font-style:normal;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.5;}
+.hero-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.hstat{
+  background:rgba(255,255,255,0.06);
+  border-radius:var(--r-sm);padding:10px 12px;
+}
+.hstat-val{font-family:'Unbounded',sans-serif;font-size:1.1rem;font-weight:600;color:#fff;}
+.hstat-label{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:200;
+  background:var(--text);
+  height:calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  display:flex;align-items:flex-start;
+  border-top:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 -4px 24px rgba(0,0,0,0.2);
+}
+.bnav-btn{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;padding:10px 4px 8px;
+  background:transparent;border:none;
+  cursor:pointer;color:rgba(255,255,255,0.4);
+  font-family:'Geologica',sans-serif;
+  font-size:10px;font-weight:500;
+  transition:color .15s;
+  min-height:var(--nav-h);
+}
+.bnav-btn .icon{font-size:20px;line-height:1;}
+.bnav-btn.on{color:var(--green);}
+.bnav-btn.on .icon{filter:drop-shadow(0 0 6px rgba(26,158,111,0.6));}
+
+/* MAIN */
+.main{padding:16px 16px 8px;}
+.section{display:none;animation:fadeUp .2s ease;}
+.section.on{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* SEC TITLE */
+.sec-title{
+  font-family:'Unbounded',sans-serif;
+  font-size:.85rem;font-weight:600;
+  color:var(--text);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.ov-card{
+  background:var(--surface);border-radius:var(--r);
+  padding:12px;border:1px solid var(--border);
+}
+.ov-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.ov-val{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:600;color:var(--text);}
+.ov-unit{font-family:'Geologica',sans-serif;font-size:10px;color:var(--text2);}
+
+.macro-block{
+  background:var(--surface);border-radius:var(--r);
+  padding:16px;border:1px solid var(--border);margin-bottom:16px;
+}
+.macro-row{margin-bottom:12px;}
+.macro-row:last-child{margin-bottom:0;}
+.macro-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;}
+.macro-name{font-weight:500;}
+.macro-num{color:var(--text2);}
+.macro-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.macro-fill{height:100%;border-radius:3px;}
+
+.tip-cards{display:flex;flex-direction:column;gap:10px;}
+.tip-card{
+  background:var(--surface);border-radius:var(--r);
+  padding:14px 15px;border:1px solid var(--border);
+  border-left:3px solid var(--green);
+  font-size:13px;color:var(--text2);line-height:1.6;
+}
+.tip-card b{color:var(--text);display:block;margin-bottom:3px;}
+
+/* DAY SELECTOR - horizontal scroll */
+.day-selector-wrap{
+  margin:0 -16px;padding:0 16px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;margin-bottom:14px;
+}
+.day-selector-wrap::-webkit-scrollbar{display:none;}
+.day-selector{
+  display:flex;gap:8px;
+  width:max-content;padding-bottom:4px;
+}
+.day-btn{
+  display:flex;flex-direction:column;align-items:center;
+  padding:8px 14px;border-radius:var(--r);
+  border:1.5px solid var(--border);
+  background:var(--surface);cursor:pointer;
+  font-family:'Geologica',sans-serif;
+  transition:all .15s;min-width:60px;
+}
+.day-btn .day-short{font-size:13px;font-weight:600;color:var(--text2);}
+.day-btn .day-badge{
+  font-size:9px;margin-top:3px;padding:1px 5px;
+  border-radius:4px;font-weight:500;
+}
+.badge-tr{background:var(--green-light);color:var(--green-dark);}
+.badge-re{background:var(--bg2);color:var(--text2);}
+.day-btn.on{background:var(--text);border-color:var(--text);}
+.day-btn.on .day-short{color:#fff;}
+.day-btn.on .badge-tr{background:rgba(26,158,111,0.3);color:#7DE8C0;}
+.day-btn.on .badge-re{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);}
+
+.day-view{display:none;}.day-view.on{display:block;}
+
+/* DAY KPIS */
+.day-kpis{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:6px;margin-bottom:14px;
+}
+.dkpi{
+  background:var(--surface);border-radius:var(--r-sm);
+  padding:9px 8px;border:1px solid var(--border);
+  text-align:center;
+}
+.dkpi-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
+.dkpi-v{font-family:'Unbounded',sans-serif;font-size:.85rem;font-weight:600;color:var(--text);}
+.dkpi-u{font-size:9px;color:var(--text3);}
+
+/* DAY HEADER */
+.day-header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;margin-bottom:12px;
+}
+.day-title{font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:600;}
+.day-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.tag-tr{background:var(--green-light);color:var(--green-dark);}
+.tag-re{background:var(--bg2);color:var(--text2);}
+.tag-pr{background:#EEE9FE;color:#4B3BAF;}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:24px;}
+.tl::before{
+  content:'';position:absolute;
+  left:7px;top:8px;bottom:8px;
+  width:1.5px;background:var(--bg2);
+}
+.tli{position:relative;margin-bottom:12px;}
+.tl-dot{
+  position:absolute;left:-19px;top:7px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--surface);border:2px solid;
+}
+.dot-g{border-color:var(--green);}
+.dot-b{border-color:var(--blue);}
+.dot-a{border-color:var(--amber);}
+.dot-gr{border-color:#CCC;}
+.tl-time{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.tl-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:11px 13px;
+}
+.tl-meal{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.tl-foods{font-size:12px;color:var(--text2);line-height:1.55;}
+.tl-kcal{
+  font-size:11px;color:var(--text3);
+  margin-top:7px;padding-top:7px;
+  border-top:1px solid var(--bg2);
+}
+
+/* PREP BOX */
+.prep-box{
+  background:var(--surface);border-radius:var(--r);
+  padding:15px;margin-top:14px;
+  border:1px solid var(--border);
+  border-top:3px solid var(--green);
+}
+.prep-title{
+  font-weight:600;font-size:13px;color:var(--text);
+  margin-bottom:10px;display:flex;align-items:center;gap:7px;
+}
+.prep-list{list-style:none;}
+.prep-item{
+  display:flex;gap:9px;align-items:flex-start;
+  padding:6px 0;border-bottom:1px solid var(--bg2);
+  font-size:12px;color:var(--text2);line-height:1.5;
+}
+.prep-item:last-child{border-bottom:none;}
+.prep-qty{font-weight:600;color:var(--text);white-space:nowrap;min-width:60px;flex-shrink:0;}
+.prep-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* SHOPPING */
+.shop-progress{
+  background:var(--surface);border-radius:var(--r);
+  padding:13px 15px;margin-bottom:14px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.progress-bar{flex:1;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .3s;}
+.progress-text{font-size:12px;color:var(--text2);white-space:nowrap;}
+.reset-btn{
+  font-size:12px;padding:5px 11px;border-radius:20px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text2);cursor:pointer;
+  font-family:'Geologica',sans-serif;
+  white-space:nowrap;
+}
+
+.shop-grid{display:flex;flex-direction:column;gap:10px;}
+.shop-card{
+  background:var(--surface);border-radius:var(--r);
+  border:1px solid var(--border);overflow:hidden;
+}
+.shop-head{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-bottom:1px solid var(--bg2);
+}
+.shop-icon{
+  width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.shop-cat{font-size:13px;font-weight:600;color:var(--text);}
+.shop-items{list-style:none;}
+.shop-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 14px;border-bottom:1px solid var(--bg2);
+  font-size:13px;cursor:pointer;
+  min-height:44px;
+}
+.shop-item:last-child{border-bottom:none;}
+.shop-item.done .shop-name{text-decoration:line-through;color:var(--text3);}
+.shop-name{color:var(--text);display:flex;align-items:center;gap:10px;}
+.shop-name input{
+  accent-color:var(--green);
+  width:18px;height:18px;flex-shrink:0;
+  cursor:pointer;
+}
+.shop-qty{color:var(--text3);font-size:12px;white-space:nowrap;margin-left:8px;}
+
+/* RULES */
+.rules-list{display:flex;flex-direction:column;gap:10px;}
+.rule-card{
+  background:var(--surface);border-radius:var(--r);
+  padding:15px;border:1px solid var(--border);
+  display:flex;gap:12px;align-items:flex-start;
+}
+.rule-num{
+  font-family:'Unbounded',sans-serif;font-size:11px;
+  color:var(--green);font-weight:600;
+  background:var(--green-light);
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.rule-body-wrap{}
+.rule-title{font-weight:600;font-size:13px;color:var(--text);margin-bottom:4px;}
+.rule-body{font-size:12px;color:var(--text2);line-height:1.6;}
+
+/* FOOTER */
+.footer{
+  background:var(--text);color:rgba(255,255,255,0.35);
+  text-align:center;padding:20px 16px;font-size:11px;
+  line-height:1.7;
+}
+.footer b{color:rgba(255,255,255,0.6);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo"><div class="logo-dot"></div>ПЛАН ПИТАНИЯ</div>
+  <div class="topbar-sub">94 → 75 кг</div>
+</div>
+
+<section class="hero">
+  <div class="hero-eyebrow">Персональный рацион</div>
+  <h1>Похудеть до <em>75 кг</em><br>сохранив мышцы</h1>
+  <p class="hero-sub">Дефицит ~500 ккал · высокий белок · адаптация под тренировки</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-val">2 050</div><div class="hstat-label">ккал в тренировочный день</div></div>
+    <div class="hstat"><div class="hstat-val">1 860</div><div class="hstat-label">ккал в день отдыха</div></div>
+    <div class="hstat"><div class="hstat-val">183 г</div><div class="hstat-label">белка в день</div></div>
+    <div class="hstat"><div class="hstat-val">7–9 мес</div><div class="hstat-label">до цели 0.5 кг/нед</div></div>
+  </div>
+</section>
+
+<main class="main">
+
+<!-- ОБЗОР -->
+<div class="section on" id="s-overview">
+  <div class="sec-title">Параметры</div>
+  <div class="ov-grid">
+    <div class="ov-card"><div class="ov-label">Вес</div><div class="ov-val">94 <span class="ov-unit">кг</span></div></div>
+    <div class="ov-card"><div class="ov-label">Цель</div><div class="ov-val">75 <span class="ov-unit">кг</span></div></div>
+    <div class="ov-card"><div class="ov-label">Рост</div><div class="ov-val">174 <span class="ov-unit">см</span></div></div>
+    <div class="ov-card"><div class="ov-label">Трени</div><div class="ov-val">2–3<span class="ov-unit"> /нед</span></div></div>
+    <div class="ov-card"><div class="ov-label">Дефицит</div><div class="ov-val">~500<span class="ov-unit"> ккал</span></div></div>
+    <div class="ov-card"><div class="ov-label">Темп</div><div class="ov-val">0.5<span class="ov-unit"> кг/нед</span></div></div>
+  </div>
+
+  <div class="sec-title">Макросы (тренир. день)</div>
+  <div class="macro-block">
+    <div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Белок</span><span class="macro-num">183 г · 36%</span></div>
+      <div class="macro-track"><div class="macro-fill" style="width:36%;background:var(--green);"></div></div>
+    </div>
+    <div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Жиры</span><span class="macro-num">70 г · 31%</span></div>
+      <div class="macro-track"><div class="macro-fill" style="width:31%;background:var(--amber);"></div></div>
+    </div>
+    <div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Углеводы</span><span class="macro-num">190 г · 37%</span></div>
+      <div class="macro-track"><div class="macro-fill" style="width:37%;background:var(--blue);"></div></div>
+    </div>
+  </div>
+
+  <div class="sec-title">Советы</div>
+  <div class="tip-cards">
+    <div class="tip-card"><b>🥚 Яйца — только в тренировочные дни</b>Пн, Ср, Пт — 3 яйца на завтрак. 9 штук в неделю, 1 десяток с запасом.</div>
+    <div class="tip-card"><b>🍗 Как готовить курицу</b>Духовка 180°C, 25–30 мин, первые 20 мин под фольгой. Специи: паприка, чеснок, орегано. Сразу 1.2 кг на всю неделю.</div>
+    <div class="tip-card"><b>🍠 Чем заменить батат</b>Картофель варёный, кукуруза, чечевица или нут — 1 в 1 по объёму.</div>
+    <div class="tip-card"><b>🥦 Брокколи</b>Замороженная — не портится, дешевле, питательность та же. 2–3 пакета по 750 г на неделю.</div>
+  </div>
+</div>
+
+<!-- ПО ДНЯМ -->
+<div class="section" id="s-days">
+  <div class="day-selector-wrap">
+    <div class="day-selector">
+      <button class="day-btn on" onclick="sd(event,'sun')"><span class="day-short">Вс</span><span class="day-badge badge-re">Отдых</span></button>
+      <button class="day-btn" onclick="sd(event,'mon')"><span class="day-short">Пн</span><span class="day-badge badge-tr">Трени</span></button>
+      <button class="day-btn" onclick="sd(event,'tue')"><span class="day-short">Вт</span><span class="day-badge badge-re">Отдых</span></button>
+      <button class="day-btn" onclick="sd(event,'wed')"><span class="day-short">Ср</span><span class="day-badge badge-tr">Трени</span></button>
+      <button class="day-btn" onclick="sd(event,'thu')"><span class="day-short">Чт</span><span class="day-badge badge-re">Отдых</span></button>
+      <button class="day-btn" onclick="sd(event,'fri')"><span class="day-short">Пт</span><span class="day-badge badge-tr">Трени</span></button>
+      <button class="day-btn" onclick="sd(event,'sat')"><span class="day-short">Сб</span><span class="day-badge badge-re">Отдых</span></button>
+    </div>
+  </div>
+
+  <!-- ВОСКРЕСЕНЬЕ -->
+  <div class="day-view on" id="d-sun">
+    <div class="day-header">
+      <div class="day-title">Воскресенье</div>
+      <div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">Готовка ~90 мин</span></div>
+    </div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">1860<span class="dkpi-u"></span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">170<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">74<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">150<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">08:00</div><div class="tl-card"><div class="tl-meal">Завтрак — без яиц</div><div class="tl-foods">Творог 0% 250 г · авокадо 80 г · хлеб цельнозерновой 60 г · томаты 100 г</div><div class="tl-kcal">175+130+145+20 = <strong>~470 ккал · Б 28 г · Ж 18 г · У 32 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 0% 150 г · грецкие орехи 15 г</div><div class="tl-kcal">105+98 = <strong>~200 ккал · Б 17 г · Ж 10 г · У 4 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:00 + готовка</div><div class="tl-card"><div class="tl-meal">Обед</div><div class="tl-foods">Лосось 180 г · гречка 60 г сухой · салат 250 г · масло 1 ч.л.</div><div class="tl-kcal">250+210+50+45 = <strong>~555 ккал · Б 48 г · Ж 20 г · У 50 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">16:30</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Греческий йогурт 2% 150 г</div><div class="tl-kcal"><strong>~130 ккал · Б 13 г · Ж 3 г · У 7 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">19:30</div><div class="tl-card"><div class="tl-meal">Ужин</div><div class="tl-foods">Куриная грудка 200 г · брокколи 300 г · оливковое масло 1 ст.л.</div><div class="tl-kcal">220+90+90 = <strong>~400 ккал · Б 45 г · Ж 13 г · У 10 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">21:30</div><div class="tl-card"><div class="tl-meal">Поздний перекус</div><div class="tl-foods">Творог 0% 150 г</div><div class="tl-kcal"><strong>~105 ккал · Б 18 г · Ж 0 г · У 5 г</strong></div></div></div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-title">⏱ Заготовки на всю неделю</div>
+      <ul class="prep-list">
+        <li class="prep-item"><span class="prep-qty">1.2 кг</span><div>Курица — духовка 180°C, 25–30 мин под фольгой, нарезать порциями<div class="prep-sub">Паприка, чеснок, орегано</div></div></li>
+        <li class="prep-item"><span class="prep-qty">400 г</span><div>Гречка сухая — сварить, ~5 порций по 180 г</div></li>
+        <li class="prep-item"><span class="prep-qty">300 г</span><div>Рис белый — сварить, ~4 порции</div></li>
+        <li class="prep-item"><span class="prep-qty">400 г</span><div>Батат/картофель — запечь, нарезать кубиками</div></li>
+        <li class="prep-item"><span class="prep-qty">9 шт</span><div>Яйца — сварить вкрутую, хранятся 7 дней<div class="prep-sub">Только Пн, Ср, Пт</div></div></li>
+        <li class="prep-item"><span class="prep-qty">~3 кг</span><div>Творог — 0% на вечер, 5% на перекусы</div></li>
+        <li class="prep-item"><span class="prep-qty">~850 г</span><div>Греческий йогурт 2% — 3 баночки по 300 г</div></li>
+        <li class="prep-item"><span class="prep-qty">1.7 кг</span><div>Брокколи замороженная — 2–3 пакета по 750 г</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ПОНЕДЕЛЬНИК -->
+  <div class="day-view" id="d-mon">
+    <div class="day-header"><div class="day-title">Понедельник</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">~15 мин готовки</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">2050</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">183<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">70<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">190<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">07:30</div><div class="tl-card"><div class="tl-meal">Завтрак 🥚 с яйцами</div><div class="tl-foods">Овсянка 55 г + молоко 1.5% 130 мл · 3 яйца · ягоды 100 г</div><div class="tl-kcal">200+60+225+50 = <strong>~535 ккал · Б 30 г · Ж 17 г · У 52 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 5% 150 г · яблоко 150 г</div><div class="tl-kcal">150+75 = <strong>~225 ккал · Б 20 г · Ж 4 г · У 20 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:30</div><div class="tl-card"><div class="tl-meal">Обед — из заготовок</div><div class="tl-foods">Куриная грудка 200 г · гречка 70 г · огурец+томат 200 г · масло 1 ч.л.</div><div class="tl-kcal">220+245+40+45 = <strong>~550 ккал · Б 58 г · Ж 10 г · У 58 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">За 1.5 ч до тренировки</div><div class="tl-card"><div class="tl-meal">Предтренировочный</div><div class="tl-foods">Куриная грудка 100 г · рис готовый 50 г</div><div class="tl-kcal">110+175 = <strong>~285 ккал · Б 29 г · Ж 2 г · У 38 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">В течение 40 мин после</div><div class="tl-card"><div class="tl-meal">Послетренировочный</div><div class="tl-foods">Куриная грудка 150 г · батат 100 г · брокколи 150 г</div><div class="tl-kcal">165+85+50 = <strong>~300 ккал · Б 36 г · Ж 2 г · У 30 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">22:00</div><div class="tl-card"><div class="tl-meal">Ужин</div><div class="tl-foods">Творог 0% 200 г</div><div class="tl-kcal"><strong>~140 ккал · Б 24 г · Ж 0 г · У 6 г</strong></div></div></div>
+    </div>
+  </div>
+
+  <!-- ВТОРНИК -->
+  <div class="day-view" id="d-tue">
+    <div class="day-header"><div class="day-title">Вторник</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">~10 мин готовки</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">1860</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">170<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">76<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">148<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">07:30</div><div class="tl-card"><div class="tl-meal">Завтрак — без яиц</div><div class="tl-foods">Творог 0% 250 г · авокадо 80 г · хлеб цельнозерновой 60 г · томаты 100 г</div><div class="tl-kcal">175+130+145+20 = <strong>~470 ккал · Б 28 г · Ж 18 г · У 32 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 0% 150 г · грецкие орехи 15 г</div><div class="tl-kcal">105+98 = <strong>~200 ккал · Б 17 г · Ж 10 г · У 4 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:30</div><div class="tl-card"><div class="tl-meal">Обед — из заготовок</div><div class="tl-foods">Куриная грудка 200 г · гречка 60 г · салат 250 г · масло 1 ч.л.</div><div class="tl-kcal">220+210+50+45 = <strong>~525 ккал · Б 55 г · Ж 10 г · У 48 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">16:30</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Греческий йогурт 2% 150 г</div><div class="tl-kcal"><strong>~130 ккал · Б 13 г · Ж 3 г · У 7 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">19:30</div><div class="tl-card"><div class="tl-meal">Ужин — свежее</div><div class="tl-foods">Нежирная говядина 200 г · шпинат тушёный 300 г · масло 1 ст.л.</div><div class="tl-kcal">280+90+90 = <strong>~460 ккал · Б 46 г · Ж 22 г · У 8 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">21:30</div><div class="tl-card"><div class="tl-meal">Поздний перекус</div><div class="tl-foods">Творог 0% 150 г</div><div class="tl-kcal"><strong>~105 ккал · Б 18 г · Ж 0 г · У 5 г</strong></div></div></div>
+    </div>
+  </div>
+
+  <!-- СРЕДА -->
+  <div class="day-view" id="d-wed">
+    <div class="day-header"><div class="day-title">Среда</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">~15 мин готовки</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">2050</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">183<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">70<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">190<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">07:30</div><div class="tl-card"><div class="tl-meal">Завтрак 🥚 с яйцами</div><div class="tl-foods">Овсянка 55 г + молоко 1.5% 130 мл · 3 яйца · банан 120 г</div><div class="tl-kcal">200+60+225+105 = <strong>~590 ккал · Б 30 г · Ж 17 г · У 65 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 5% 150 г · яблоко 150 г</div><div class="tl-kcal">150+75 = <strong>~225 ккал · Б 20 г · Ж 4 г · У 20 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:30</div><div class="tl-card"><div class="tl-meal">Обед — из заготовок</div><div class="tl-foods">Индейка/грудка 200 г · рис 70 г · огурец+зелень 200 г · масло 1 ч.л.</div><div class="tl-kcal">220+245+30+45 = <strong>~540 ккал · Б 55 г · Ж 9 г · У 56 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">За 1.5 ч до тренировки</div><div class="tl-card"><div class="tl-meal">Предтренировочный</div><div class="tl-foods">Куриная грудка 100 г · батат варёный 100 г</div><div class="tl-kcal">110+85 = <strong>~195 ккал · Б 24 г · Ж 1 г · У 20 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">В течение 40 мин после</div><div class="tl-card"><div class="tl-meal">Послетренировочный</div><div class="tl-foods">Треска/тилапия 150 г · рис 50 г · тушёные овощи 150 г</div><div class="tl-kcal">130+175+50 = <strong>~355 ккал · Б 36 г · Ж 2 г · У 50 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">22:00</div><div class="tl-card"><div class="tl-meal">Ужин</div><div class="tl-foods">Творог 0% 200 г</div><div class="tl-kcal"><strong>~140 ккал · Б 24 г · Ж 0 г · У 6 г</strong></div></div></div>
+    </div>
+  </div>
+
+  <!-- ЧЕТВЕРГ -->
+  <div class="day-view" id="d-thu">
+    <div class="day-header"><div class="day-title">Четверг</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">~10 мин готовки</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">1860</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">170<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">72<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">150<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">07:30</div><div class="tl-card"><div class="tl-meal">Завтрак — без яиц</div><div class="tl-foods">Творог 5% 200 г · авокадо 60 г · хлеб цельнозерновой 60 г · огурец</div><div class="tl-kcal">180+96+145+15 = <strong>~440 ккал · Б 25 г · Ж 16 г · У 30 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 0% 150 г · ягоды 80 г</div><div class="tl-kcal">105+40 = <strong>~145 ккал · Б 18 г · Ж 0 г · У 10 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:30</div><div class="tl-card"><div class="tl-meal">Обед — из заготовок</div><div class="tl-foods">Тунец в собств. соку 150 г · гречка 60 г · салат 250 г · масло 1 ч.л.</div><div class="tl-kcal">135+210+50+45 = <strong>~440 ккал · Б 42 г · Ж 8 г · У 46 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">16:30</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Греческий йогурт 2% 150 г</div><div class="tl-kcal"><strong>~130 ккал · Б 13 г · Ж 3 г · У 7 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">19:30</div><div class="tl-card"><div class="tl-meal">Ужин — свежее</div><div class="tl-foods">Лосось 180 г · брокколи 300 г · масло 1 ст.л.</div><div class="tl-kcal">250+90+90 = <strong>~430 ккал · Б 42 г · Ж 22 г · У 9 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">21:30</div><div class="tl-card"><div class="tl-meal">Поздний перекус</div><div class="tl-foods">Творог 0% 150 г</div><div class="tl-kcal"><strong>~105 ккал · Б 18 г · Ж 0 г · У 5 г</strong></div></div></div>
+    </div>
+  </div>
+
+  <!-- ПЯТНИЦА -->
+  <div class="day-view" id="d-fri">
+    <div class="day-header"><div class="day-title">Пятница</div><div class="day-tags"><span class="tag tag-tr">Тренировка</span><span class="tag tag-pr">Докупить свежего</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">2050</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">183<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">70<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">190<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">07:30</div><div class="tl-card"><div class="tl-meal">Завтрак 🥚 с яйцами</div><div class="tl-foods">Овсянка 55 г + молоко 1.5% 130 мл · 3 яйца · ягоды 100 г</div><div class="tl-kcal">200+60+225+50 = <strong>~535 ккал · Б 30 г · Ж 17 г · У 52 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">11:00</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 5% 150 г · яблоко 150 г</div><div class="tl-kcal">150+75 = <strong>~225 ккал · Б 20 г · Ж 4 г · У 20 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">13:30</div><div class="tl-card"><div class="tl-meal">Обед — варим свежее</div><div class="tl-foods">Куриная грудка 200 г · гречка 70 г · овощи 200 г · масло 1 ч.л.</div><div class="tl-kcal">220+245+40+45 = <strong>~550 ккал · Б 58 г · Ж 10 г · У 58 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">За 1.5 ч до тренировки</div><div class="tl-card"><div class="tl-meal">Предтренировочный</div><div class="tl-foods">Куриная грудка 100 г · рис 50 г</div><div class="tl-kcal">110+175 = <strong>~285 ккал · Б 29 г · Ж 2 г · У 38 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">В течение 40 мин после</div><div class="tl-card"><div class="tl-meal">Послетренировочный</div><div class="tl-foods">Куриная грудка 150 г · батат 100 г · фасоль стручковая 150 г</div><div class="tl-kcal">165+85+50 = <strong>~300 ккал · Б 36 г · Ж 2 г · У 30 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">22:00</div><div class="tl-card"><div class="tl-meal">Ужин</div><div class="tl-foods">Творог 0% 200 г</div><div class="tl-kcal"><strong>~140 ккал · Б 24 г · Ж 0 г · У 6 г</strong></div></div></div>
+    </div>
+  </div>
+
+  <!-- СУББОТА -->
+  <div class="day-view" id="d-sat">
+    <div class="day-header"><div class="day-title">Суббота</div><div class="day-tags"><span class="tag tag-re">Отдых</span><span class="tag tag-pr">Свободный день</span></div></div>
+    <div class="day-kpis">
+      <div class="dkpi"><div class="dkpi-l">Ккал</div><div class="dkpi-v">1860</div></div>
+      <div class="dkpi"><div class="dkpi-l">Белок</div><div class="dkpi-v">170<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Жиры</div><div class="dkpi-v">72<span class="dkpi-u"> г</span></div></div>
+      <div class="dkpi"><div class="dkpi-l">Углев.</div><div class="dkpi-v">150<span class="dkpi-u"> г</span></div></div>
+    </div>
+    <div class="tl">
+      <div class="tli"><div class="tl-dot dot-a"></div><div class="tl-time">08:30</div><div class="tl-card"><div class="tl-meal">Завтрак — без яиц</div><div class="tl-foods">Греческий йогурт 2% 250 г · орехи грецкие 20 г · ягоды 150 г · хлеб цельнозерновой 60 г</div><div class="tl-kcal">215+130+75+145 = <strong>~565 ккал · Б 27 г · Ж 18 г · У 55 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-g"></div><div class="tl-time">12:00</div><div class="tl-card"><div class="tl-meal">Обед</div><div class="tl-foods">Тунец/грудка 200 г · гречка 60 г · салат 250 г · масло 1 ч.л.</div><div class="tl-kcal">220+210+50+45 = <strong>~525 ккал · Б 50 г · Ж 10 г · У 48 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">15:30</div><div class="tl-card"><div class="tl-meal">Перекус</div><div class="tl-foods">Творог 0% 150 г · ягоды или банан 100 г</div><div class="tl-kcal">105+60 = <strong>~165 ккал · Б 18 г · Ж 0 г · У 18 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-b"></div><div class="tl-time">19:00</div><div class="tl-card"><div class="tl-meal">Ужин</div><div class="tl-foods">Говядина/лосось 200 г · запечённые овощи 300 г · масло 1 ст.л.</div><div class="tl-kcal">280+90+90 = <strong>~460 ккал · Б 48 г · Ж 22 г · У 10 г</strong></div></div></div>
+      <div class="tli"><div class="tl-dot dot-gr"></div><div class="tl-time">21:30</div><div class="tl-card"><div class="tl-meal">Поздний перекус</div><div class="tl-foods">Творог 0% 150 г</div><div class="tl-kcal"><strong>~105 ккал · Б 18 г · Ж 0 г · У 5 г</strong></div></div></div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-title">🛒 Докупить к воскресной готовке</div>
+      <ul class="prep-list">
+        <li class="prep-item"><span class="prep-qty">1.2–1.5 кг</span><div>Куриная грудка или индейка</div></li>
+        <li class="prep-item"><span class="prep-qty">свежие</span><div>Огурцы, томаты, болгарский перец</div></li>
+        <li class="prep-item"><span class="prep-qty">по остатку</span><div>Творог, йогурт, яйца (1 десяток)</div></li>
+        <li class="prep-item"><span class="prep-qty">200 г</span><div>Лосось или треска на воскресный ужин</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ПОКУПКИ -->
+<div class="section" id="s-shopping">
+  <div class="shop-progress">
+    <div class="progress-text">Куплено: <strong id="done-c">0</strong>/<strong id="total-c">0</strong></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetShop()">Сбросить</button>
+  </div>
+  <div class="shop-grid">
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#FFF0E0;">🥩</div><div class="shop-cat">Мясо и птица</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Куриная грудка</label><span class="shop-qty">1.5 кг</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Индейка (филе)</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Нежирная говядина</label><span class="shop-qty">400 г</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#E0F0FF;">🐟</div><div class="shop-cat">Рыба и морепродукты</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Лосось / форель</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Треска / тилапия</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Тунец (собств. сок)</label><span class="shop-qty">3 банки</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#FFFCE0;">🥚</div><div class="shop-cat">Яйца и молочное</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Яйца куриные</label><span class="shop-qty">10 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Творог 0%</label><span class="shop-qty">2 кг</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Творог 5%</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Греческий йогурт 2%</label><span class="shop-qty">850 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Молоко 1.5%</label><span class="shop-qty">1 л</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#E0FFE8;">🥦</div><div class="shop-cat">Овощи</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Брокколи замороженная</label><span class="shop-qty">1.7 кг</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Шпинат</label><span class="shop-qty">300 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Огурцы</label><span class="shop-qty">6 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Томаты</label><span class="shop-qty">8 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Болгарский перец</label><span class="shop-qty">4 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Стручк. фасоль зам.</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Батат</label><span class="shop-qty">500 г</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#FFE8F0;">🍎</div><div class="shop-cat">Фрукты и ягоды</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Яблоки</label><span class="shop-qty">6 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Бананы</label><span class="shop-qty">4 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Ягоды (черника/малина)</label><span class="shop-qty">400 г</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#F0F0E0;">🌾</div><div class="shop-cat">Крупы и хлеб</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Овсянка (долгая варка)</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Гречка</label><span class="shop-qty">500 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Рис белый</label><span class="shop-qty">400 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Хлеб цельнозерновой</label><span class="shop-qty">1 буханка</span></li>
+      </ul>
+    </div>
+    <div class="shop-card">
+      <div class="shop-head"><div class="shop-icon" style="background:#F8F0E8;">🫒</div><div class="shop-cat">Жиры и приправы</div></div>
+      <ul class="shop-items">
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Оливковое масло extra virgin</label><span class="shop-qty">250 мл</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Авокадо</label><span class="shop-qty">4 шт</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Грецкие орехи</label><span class="shop-qty">150 г</span></li>
+        <li class="shop-item"><label class="shop-name"><input type="checkbox" onchange="tick(this)">Специи (паприка, чеснок, орегано)</label><span class="shop-qty">по вкусу</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ПРАВИЛА -->
+<div class="section" id="s-rules">
+  <div class="sec-title">Ключевые правила</div>
+  <div class="rules-list">
+    <div class="rule-card"><div class="rule-num">01</div><div class="rule-body-wrap"><div class="rule-title">Вода</div><div class="rule-body">2.5–3 л в день. В тренировочные дни +0.5 л. Стакан воды перед каждым приёмом снижает аппетит.</div></div></div>
+    <div class="rule-card"><div class="rule-num">02</div><div class="rule-body-wrap"><div class="rule-title">Белок — приоритет №1</div><div class="rule-body">183 г/день защищает мышцы при дефиците. 30–40 г в каждом крупном приёме. Без белка тело разрушает мышцы.</div></div></div>
+    <div class="rule-card"><div class="rule-num">03</div><div class="rule-body-wrap"><div class="rule-title">Углеводы — умно</div><div class="rule-body">Основная часть — до и после тренировки. В дни отдыха меньше круп. Убрать: сахар, белый хлеб, соки, газировку.</div></div></div>
+    <div class="rule-card"><div class="rule-num">04</div><div class="rule-body-wrap"><div class="rule-title">Жиры — не враг</div><div class="rule-body">Нужны для тестостерона. Оливковое масло, авокадо, орехи, лосось. Не опускать ниже 55 г/день.</div></div></div>
+    <div class="rule-card"><div class="rule-num">05</div><div class="rule-body-wrap"><div class="rule-title">Читмил</div><div class="rule-body">1 раз в 7–10 дней. Удобнее в субботу вечером. Не превращать в повод съесть всё подряд.</div></div></div>
+    <div class="rule-card"><div class="rule-num">06</div><div class="rule-body-wrap"><div class="rule-title">Контроль прогресса</div><div class="rule-body">Взвешиваться раз в неделю утром натощак. Вес стоит 2 недели → минус 100–150 ккал или +20 мин кардио.</div></div></div>
+    <div class="rule-card"><div class="rule-num">07</div><div class="rule-body-wrap"><div class="rule-title">Срок до цели</div><div class="rule-body">19 кг при 0.5 кг/нед = 7–9 месяцев. Реалистично и безопасно.</div></div></div>
+    <div class="rule-card"><div class="rule-num">08</div><div class="rule-body-wrap"><div class="rule-title">Как готовить курицу</div><div class="rule-body">Духовка 180°C, 25–30 мин под фольгой. Специи: паприка, чеснок, орегано. Большой партией в воскресенье.</div></div></div>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer">
+  <b>Персональный план питания</b><br>
+  Мужчина 94 кг → 75 кг · Тренировки 2–3 раза/нед<br>
+  Проконсультируйтесь с врачом перед началом диеты
+</footer>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="bnav-btn on" onclick="go(event,'overview')"><span class="icon">📊</span>Обзор</button>
+  <button class="bnav-btn" onclick="go(event,'days')"><span class="icon">📅</span>По дням</button>
+  <button class="bnav-btn" onclick="go(event,'shopping')"><span class="icon">🛒</span>Покупки</button>
+  <button class="bnav-btn" onclick="go(event,'rules')"><span class="icon">📋</span>Правила</button>
+</nav>
+
+<script>
+function go(e,id){
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
+  e.currentTarget.classList.add('on');
+  document.getElementById('s-'+id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function sd(e,id){
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.day-view').forEach(d=>d.classList.remove('on'));
+  e.currentTarget.classList.add('on');
+  document.getElementById('d-'+id).classList.add('on');
+}
+function tick(cb){
+  cb.closest('.shop-item').classList.toggle('done',cb.checked);
+  updateProgress();
+}
+function updateProgress(){
+  const all=document.querySelectorAll('.shop-items input');
+  const done=document.querySelectorAll('.shop-items input:checked');
+  document.getElementById('done-c').textContent=done.length;
+  document.getElementById('total-c').textContent=all.length;
+  document.getElementById('prog-fill').style.width=(all.length?done.length/all.length*100:0)+'%';
+}
+function resetShop(){
+  document.querySelectorAll('.shop-items input').forEach(cb=>{
+    cb.checked=false;
+    cb.closest('.shop-item').classList.remove('done');
+  });
+  updateProgress();
+}
+updateProgress();
+</script>
+</body>
+</html>
