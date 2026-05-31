@@ -40,9 +40,15 @@ body{
   background:var(--text);
   height:52px;
   display:flex;align-items:center;
-  padding:0 16px;
+  padding:0;
   position:sticky;top:0;z-index:100;
   box-shadow:0 1px 12px rgba(0,0,0,0.2);
+}
+.topbar-inner{
+  max-width:1280px;
+  margin:0 auto;
+  width:100%;
+  padding:0 16px;
 }
 .topbar-logo{
   font-family:'Unbounded',sans-serif;
@@ -52,15 +58,20 @@ body{
 }
 .logo-dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
 .topbar-sub{
-  margin-left:auto;
   font-size:11px;color:rgba(255,255,255,0.45);
 }
 
 /* HERO */
 .hero{
   background:var(--text);
-  padding:20px 16px 28px;
+  padding:0;
   position:relative;overflow:hidden;
+}
+.hero-inner-wrap{
+  max-width:1280px;
+  margin:0 auto;
+  padding:20px 16px 28px;
+  position:relative;z-index:1;
 }
 .hero::after{
   content:'';position:absolute;
@@ -97,9 +108,15 @@ body{
   background:var(--text);
   height:calc(var(--nav-h) + var(--safe-bottom));
   padding-bottom:var(--safe-bottom);
-  display:flex;align-items:flex-start;
+  display:flex;align-items:flex-start;justify-content:center;
   border-top:1px solid rgba(255,255,255,0.08);
   box-shadow:0 -4px 24px rgba(0,0,0,0.2);
+}
+.bnav-inner{
+  max-width:1280px;
+  width:100%;
+  display:flex;
+  align-items:flex-start;
 }
 .bnav-btn{
   flex:1;display:flex;flex-direction:column;
@@ -116,8 +133,9 @@ body{
 .bnav-btn.on{color:var(--green);}
 .bnav-btn.on .icon{filter:drop-shadow(0 0 6px rgba(26,158,111,0.6));}
 
-/* MAIN */
-.main{padding:16px 16px 8px;}
+/* MAX WIDTH */
+.main{padding:16px 16px 8px;max-width:1280px;margin:0 auto;}
+.topbar-inner,.hero-inner-wrap,.footer-inner{max-width:1280px;margin:0 auto;width:100%;}
 .section{display:none;animation:fadeUp .2s ease;}
 .section.on{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
@@ -496,11 +514,14 @@ body{
 <body>
 
 <div class="topbar">
-  <div class="topbar-logo"><div class="logo-dot"></div>ПЛАН ПИТАНИЯ</div>
-  <div class="topbar-sub">94 → 75 кг</div>
+  <div class="topbar-inner" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:0 16px;">
+    <div class="topbar-logo"><div class="logo-dot"></div>ПЛАН ПИТАНИЯ</div>
+    <div class="topbar-sub">94 → 75 кг</div>
+  </div>
 </div>
 
 <section class="hero">
+  <div class="hero-inner-wrap" style="padding:20px 16px 28px;">
   <div class="hero-eyebrow">Персональный рацион</div>
   <h1>Похудеть до <em>75 кг</em><br>сохранив мышцы</h1>
   <p class="hero-sub">Дефицит ~500 ккал · высокий белок · адаптация под тренировки</p>
@@ -509,6 +530,7 @@ body{
     <div class="hstat"><div class="hstat-val">1 860</div><div class="hstat-label">ккал в день отдыха</div></div>
     <div class="hstat"><div class="hstat-val">183 г</div><div class="hstat-label">белка в день</div></div>
     <div class="hstat"><div class="hstat-val">7–9 мес</div><div class="hstat-label">до цели 0.5 кг/нед</div></div>
+  </div>
   </div>
 </section>
 
@@ -849,17 +871,21 @@ body{
 </main>
 
 <footer class="footer">
-  <b>Персональный план питания</b><br>
-  Мужчина 94 кг → 75 кг · Тренировки 2–3 раза/нед<br>
-  Проконсультируйтесь с врачом перед началом диеты
+  <div style="max-width:1280px;margin:0 auto;">
+    <b>Персональный план питания</b><br>
+    Мужчина 94 кг → 75 кг · Тренировки 2–3 раза/нед<br>
+    Проконсультируйтесь с врачом перед началом диеты
+  </div>
 </footer>
 
 <nav class="bottom-nav">
-  <button class="bnav-btn on" onclick="go(event,'overview')"><span class="icon">📊</span>Обзор</button>
-  <button class="bnav-btn" onclick="go(event,'days')"><span class="icon">📅</span>По дням</button>
-  <button class="bnav-btn" onclick="go(event,'progress')"><span class="icon">📈</span>Прогресс</button>
-  <button class="bnav-btn" onclick="go(event,'shopping')"><span class="icon">🛒</span>Покупки</button>
-  <button class="bnav-btn" onclick="go(event,'rules')"><span class="icon">📋</span>Правила</button>
+  <div class="bnav-inner">
+    <button class="bnav-btn on" onclick="go(event,'overview')"><span class="icon">📊</span>Обзор</button>
+    <button class="bnav-btn" onclick="go(event,'days')"><span class="icon">📅</span>По дням</button>
+    <button class="bnav-btn" onclick="go(event,'progress')"><span class="icon">📈</span>Прогресс</button>
+    <button class="bnav-btn" onclick="go(event,'shopping')"><span class="icon">🛒</span>Покупки</button>
+    <button class="bnav-btn" onclick="go(event,'rules')"><span class="icon">📋</span>Правила</button>
+  </div>
 </nav>
 
 <script>
